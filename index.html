@@ -12,24 +12,27 @@
   " />
   <title>Autonomous Workout Tracker & ML Performance Forecaster</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#070a13" />
+  <meta name="theme-color" content="#090314" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="AutoWorkoutML" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg: #070a13;
-      --card: #121826;
-      --card-alt: #1a2236;
-      --border: #232f48;
-      --accent: #38bdf8;
-      --purple: #c084fc;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
+      --bg: #090314;
+      --card: #140827;
+      --card-alt: #1d0d38;
+      --border: #3b1866;
+      --accent: #ff2a85;
+      --cyan: #00f0ff;
+      --purple: #b026ff;
+      --success: #05ffa1;
+      --warning: #ffb703;
+      --danger: #ff3366;
+      --text: #fdf4ff;
+      --text-muted: #a78bfa;
+      --glow-pink: 0 0 12px rgba(255, 42, 133, 0.4);
+      --glow-cyan: 0 0 12px rgba(0, 240, 255, 0.35);
     }
     * {
       box-sizing: border-box;
@@ -62,6 +65,7 @@
       flex-direction: column;
     }
     .header-title {
+      text-shadow: 0 0 10px rgba(255, 42, 133, 0.6);
       font-size: 1.1rem;
       font-weight: 700;
       color: var(--accent);
@@ -170,18 +174,45 @@
       text-transform: uppercase;
       margin-bottom: 0.3rem;
     }
-    select, input[type="date"] {
+    select {
       width: 100%;
-      background: #090d16;
+      background: #170a30;
       border: 1px solid var(--border);
-      color: #fff;
+      color: var(--text);
       padding: 0.65rem;
       border-radius: 8px;
       font-size: 0.88rem;
       outline: none;
+      transition: all 0.2s ease;
     }
-    select:focus, input:focus {
+    select:focus {
       border-color: var(--accent);
+      box-shadow: var(--glow-pink);
+    }
+    input[type="date"] {
+      width: 100%;
+      background: #1a0836 !important;
+      border: 1.5px solid var(--cyan) !important;
+      color: #00f0ff !important;
+      padding: 0.65rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      outline: none;
+      color-scheme: dark;
+      box-shadow: var(--glow-cyan);
+      transition: all 0.2s ease;
+    }
+    input[type="date"]:focus {
+      border-color: var(--accent) !important;
+      box-shadow: var(--glow-pink);
+      color: var(--accent) !important;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(65%) sepia(90%) saturate(1500%) hue-rotate(145deg) brightness(130%) drop-shadow(0 0 4px #00f0ff);
+      cursor: pointer;
+      opacity: 1;
+      padding: 4px;
     }
     .prompt-banner {
       background: rgba(56, 189, 248, 0.08);
@@ -487,7 +518,7 @@
 
   <main class="content" id="analytics-view" style="display: none;">
     <div class="ml-info-card">
-      <div class="top"><span>⚡ Self-Tuning Bayesian Engine</span><span id="lambda-indicator">λ = Auto (GCV)</span></div>
+      <div class="top"><span>🌴 Autonomous Performance Stats</span><span id="lambda-indicator">λ = Auto (GCV)</span></div>
       <div class="desc">Computes Kalman state-space filtering alongside Banister impulse-response tracking autonomously.</div>
     </div>
 
@@ -536,9 +567,29 @@
     </div>
   </main>
 
+  <main class="content" id="history-view" style="display: none;">
+    <div class="day-selector-card">
+      <div class="row">
+        <div class="col">
+          <label>Filter by Exercise</label>
+          <select id="hist-filter-ex" onchange="renderHistoryTimeline()">
+            <option value="ALL">Show All Exercises</option>
+          </select>
+        </div>
+        <div class="col" style="flex: 0 0 100px;">
+          <label>Total Logs</label>
+          <div id="hist-total-count" style="font-size: 1.1rem; font-weight: 800; color: var(--accent); padding-top: 0.35rem;">0 Days</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="history-timeline-container"></div>
+  </main>
+
   <nav class="bottom-nav">
     <button class="nav-tab-btn active" id="tab-log" onclick="switchMainTab('log')"><span class="icon">🏋️</span><span>Daily Log</span></button>
-    <button class="nav-tab-btn" id="tab-analytics" onclick="switchMainTab('analytics')"><span class="icon">🧠</span><span>Auto ML & Stats</span></button>
+    <button class="nav-tab-btn" id="tab-history" onclick="switchMainTab('history')"><span class="icon">📜</span><span>Past Logs</span></button>
+    <button class="nav-tab-btn" id="tab-analytics" onclick="switchMainTab('analytics')"><span class="icon">🧠</span><span>Stats</span></button>
   </nav>
 
   <div class="toast" id="toast-banner">Session Saved & Model Calibrated!</div>
@@ -639,7 +690,6 @@
 
     // 4. SECURE TOKEN MANAGEMENT & SILENT FITBIT OAUTH
     function initAutomatedFitbit() {
-      // Catch token from fragment and wipe URL fragment instantly to prevent leakage
       if (window.location.hash.includes("access_token")) {
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const token = hashParams.get("access_token");
@@ -767,7 +817,7 @@
         let maxRow = i;
         for (let k = i + 1; k < n; k++) if (Math.abs(A[k][i]) > Math.abs(A[maxRow][i])) maxRow = k;
         [A[i], A[maxRow]] = [A[maxRow], A[i]];
-        [I[i], I[maxRow]] = [I[maxRow], I[i]];
+        [I[I_idx = i], I[maxRow]] = [I[maxRow], I[i]];
         const pivot = A[i][i];
         if (Math.abs(pivot) < 1e-9) return null;
         for (let j = 0; j < n; j++) { A[i][j] /= pivot; I[i][j] /= pivot; }
@@ -783,6 +833,7 @@
 
     // 6. INITIALIZATION & SECURE DOM CONSTRUCTION
     function initializeApp() {
+      populateHistoryFilter();
       initLiveClock();
       document.getElementById("date-input").value = getLocalISODate();
       onDateSelectionChanged();
@@ -845,7 +896,6 @@
       return records.sort((a, b) => a.timestamp - b.timestamp);
     }
 
-    // Secure DOM construction replacing raw innerHTML
     function renderActiveExerciseList() {
       const split = document.getElementById("split-select").value;
       const date = document.getElementById("date-input").value;
@@ -892,7 +942,6 @@
         card.className = "exercise-card";
         const enc = encodeURIComponent(ex.name);
 
-        // Header
         const header = document.createElement("div");
         header.className = "ex-header";
         const titleSpan = document.createElement("span");
@@ -904,7 +953,6 @@
         header.appendChild(titleSpan);
         header.appendChild(bracketSpan);
 
-        // Subline
         const subline = document.createElement("div");
         subline.className = "ex-subline";
         const mlSpan = document.createElement("span");
@@ -915,11 +963,9 @@
         subline.appendChild(mlSpan);
         subline.appendChild(targetSpan);
 
-        // Inputs Grid
         const grid = document.createElement("div");
         grid.className = "inputs-grid";
 
-        // Weight pill
         const wPill = document.createElement("div");
         wPill.className = "input-pill";
         const wInput = document.createElement("input");
@@ -936,7 +982,6 @@
         wPill.appendChild(wInput);
         wPill.appendChild(wUnit);
 
-        // Reps pill
         const rPill = document.createElement("div");
         rPill.className = "input-pill";
         const rInput = document.createElement("input");
@@ -953,7 +998,6 @@
         rPill.appendChild(rInput);
         rPill.appendChild(rUnit);
 
-        // HR pill
         const hrPill = document.createElement("div");
         hrPill.className = "input-pill";
         const hrInput = document.createElement("input");
@@ -974,7 +1018,6 @@
         grid.appendChild(rPill);
         grid.appendChild(hrPill);
 
-        // Alert Box
         const alertBox = document.createElement("div");
         alertBox.className = "alert-box";
         alertBox.id = `alert_${enc}`;
@@ -1096,11 +1139,171 @@
 
     function switchMainTab(tab) {
       document.getElementById("tab-log").classList.toggle("active", tab === 'log');
+      document.getElementById("tab-history").classList.toggle("active", tab === 'history');
       document.getElementById("tab-analytics").classList.toggle("active", tab === 'analytics');
+      
       document.getElementById("log-view").style.display = tab === 'log' ? 'block' : 'none';
+      document.getElementById("history-view").style.display = tab === 'history' ? 'block' : 'none';
       document.getElementById("analytics-view").style.display = tab === 'analytics' ? 'block' : 'none';
-      document.getElementById("page-title").textContent = tab === 'log' ? "Today's Workout" : "Autonomous ML Forecaster";
-      if (tab === 'analytics') executeMLAnalysis();
+      
+      if (tab === 'log') document.getElementById("page-title").textContent = "Today's Workout";
+      else if (tab === 'history') {
+        document.getElementById("page-title").textContent = "Logged Sessions";
+        renderHistoryTimeline();
+      } else if (tab === 'analytics') {
+        document.getElementById("page-title").textContent = "Stats";
+        executeMLAnalysis();
+      }
+    }
+
+    function populateHistoryFilter() {
+      const sel = document.getElementById("hist-filter-ex");
+      if (!sel) return;
+      sel.innerHTML = '<option value="ALL">Show All Exercises</option>';
+      Object.entries(PRESCRIBED_SPLITS).forEach(([split, items]) => {
+        if (split === "Rest") return;
+        const grp = document.createElement("optgroup");
+        grp.label = split;
+        items.forEach(ex => {
+          const opt = document.createElement("option");
+          opt.value = ex.name;
+          opt.textContent = ex.name;
+          grp.appendChild(opt);
+        });
+        sel.appendChild(grp);
+      });
+    }
+
+    function renderHistoryTimeline() {
+      const container = document.getElementById("history-timeline-container");
+      if (!container) return;
+      container.innerHTML = "";
+
+      const filterEx = document.getElementById("hist-filter-ex").value;
+      const allDates = [];
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith("workout_")) {
+          const d = k.replace("workout_", "");
+          allDates.push(d);
+        }
+      }
+
+      allDates.sort((a, b) => b.localeCompare(a));
+      document.getElementById("hist-total-count").textContent = `${allDates.length} Days`;
+
+      if (allDates.length === 0) {
+        const emptyCard = document.createElement("div");
+        emptyCard.style.cssText = "background:var(--card); border:1px solid var(--border); border-radius:12px; padding:2rem 1rem; text-align:center; color:var(--text-muted);";
+        emptyCard.innerHTML = '<div style="font-size:2rem; margin-bottom:0.5rem;">📋</div><div style="font-weight:700; color:#fff;">No Workout Sessions Saved Yet</div><div style="font-size:0.8rem; margin-top:0.3rem;">Log today\'s workout or tap "🧪 Logs" at the top right to load demo data.</div>';
+        container.appendChild(emptyCard);
+        return;
+      }
+
+      let displayedCount = 0;
+
+      allDates.forEach(dateStr => {
+        let dayData = {};
+        try {
+          dayData = JSON.parse(localStorage.getItem(`workout_${dateStr}`) || "{}");
+        } catch (e) { return; }
+
+        const bio = dayData.__bio || { sleep: 80, rhr: 58, hrv: 50 };
+        const exercises = [];
+
+        Object.entries(dayData).forEach(([k, v]) => {
+          if (k !== "__bio" && v && (v.weight !== null || v.reps !== null)) {
+            if (filterEx === "ALL" || filterEx === k) {
+              exercises.push({ name: k, weight: v.weight, reps: v.reps, hrSpike: v.hrSpike });
+            }
+          }
+        });
+
+        if (exercises.length === 0) return;
+        displayedCount++;
+
+        const card = document.createElement("div");
+        card.className = "day-selector-card";
+        card.style.marginBottom = "0.85rem";
+
+        const header = document.createElement("div");
+        header.style.cssText = "display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:0.5rem; margin-bottom:0.6rem;";
+        
+        const dateBlock = document.createElement("div");
+        const dateText = document.createElement("div");
+        dateText.style.cssText = "font-weight:800; font-size:0.95rem; color:#fff;";
+        dateText.textContent = dateStr;
+        const dayName = new Date(dateStr + "T00:00:00").toLocaleDateString(undefined, { weekday: 'long' });
+        const subDate = document.createElement("div");
+        subDate.style.cssText = "font-size:0.7rem; color:var(--text-muted);";
+        subDate.textContent = dayName;
+        dateBlock.appendChild(dateText);
+        dateBlock.appendChild(subDate);
+
+        const badgeBlock = document.createElement("div");
+        badgeBlock.style.cssText = "display:flex; gap:0.4rem; align-items:center;";
+
+        const sleepPill = document.createElement("span");
+        sleepPill.style.cssText = `font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:10px; background:rgba(56,189,248,0.12); color:${bio.sleep < 70 ? 'var(--danger)' : 'var(--accent)'}; border:1px solid ${bio.sleep < 70 ? 'rgba(239,68,68,0.3)' : 'rgba(56,189,248,0.3)'};`;
+        sleepPill.textContent = `Sleep: ${bio.sleep}`;
+        
+        const rhrPill = document.createElement("span");
+        rhrPill.style.cssText = "font-size:0.68rem; font-weight:700; padding:2px 7px; border-radius:10px; background:rgba(192,132,252,0.12); color:var(--purple); border:1px solid rgba(192,132,252,0.3);";
+        rhrPill.textContent = `RHR: ${bio.rhr}`;
+
+        const editBtn = document.createElement("button");
+        editBtn.className = "btn-chip";
+        editBtn.style.padding = "2px 8px";
+        editBtn.style.fontSize = "0.7rem";
+        editBtn.textContent = "✏️ Edit";
+        editBtn.onclick = () => {
+          document.getElementById("date-input").value = dateStr;
+          onDateSelectionChanged();
+          switchMainTab('log');
+        };
+
+        badgeBlock.appendChild(sleepPill);
+        badgeBlock.appendChild(rhrPill);
+        badgeBlock.appendChild(editBtn);
+
+        header.appendChild(dateBlock);
+        header.appendChild(badgeBlock);
+        card.appendChild(header);
+
+        const exList = document.createElement("div");
+        exercises.forEach(ex => {
+          const item = document.createElement("div");
+          item.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:0.35rem 0; font-size:0.82rem; border-bottom:1px solid rgba(35,47,72,0.4);";
+          
+          const exNameSpan = document.createElement("span");
+          exNameSpan.style.color = "#fff";
+          exNameSpan.style.fontWeight = "600";
+          exNameSpan.textContent = ex.name;
+
+          const exValSpan = document.createElement("span");
+          exValSpan.style.cssText = "color:var(--text-muted); font-variant-numeric:tabular-nums;";
+          
+          const wStr = ex.weight !== null ? `${ex.weight} kg` : "-";
+          const rStr = ex.reps !== null ? `${ex.reps} reps` : "-";
+          const hrStr = ex.hrSpike ? ` (${ex.hrSpike} bpm)` : "";
+          exValSpan.innerHTML = `<b style="color:var(--accent);">${wStr}</b> × <b style="color:#fff;">${rStr}</b><span style="font-size:0.7rem; color:var(--purple);">${hrStr}</span>`;
+
+          item.appendChild(exNameSpan);
+          item.appendChild(exValSpan);
+          exList.appendChild(item);
+        });
+
+        card.appendChild(exList);
+        container.appendChild(card);
+      });
+
+      if (displayedCount === 0 && allDates.length > 0) {
+        const noFilter = document.createElement("div");
+        noFilter.style.cssText = "background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.5rem; text-align:center; color:var(--text-muted); font-size:0.85rem;";
+        noFilter.textContent = `No logged sessions found containing "${filterEx}".`;
+        container.appendChild(noFilter);
+      }
     }
 
     // 7. ANALYTICS & FORECASTING
@@ -1204,16 +1407,16 @@
         data: {
           labels: labels,
           datasets: [
-            { label: 'Logged Lifts (kg)', data: actuals, borderColor: '#38bdf8', backgroundColor: '#38bdf8', pointRadius: 4, borderWidth: 2 },
-            { label: 'Autonomous Model Target', data: fitted, borderColor: '#c084fc', borderDash: [5, 4], pointRadius: 4, borderWidth: 2 }
+            { label: 'Logged Lifts (kg)', data: actuals, borderColor: '#00f0ff', backgroundColor: '#00f0ff', pointRadius: 4, borderWidth: 2.5 },
+            { label: 'Model Target (Forecast)', data: fitted, borderColor: '#ff2a85', borderDash: [5, 4], pointRadius: 4, borderWidth: 2.5 }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            y: { grid: { color: '#232f48' }, ticks: { color: '#94a3b8' } },
-            x: { grid: { color: '#232f48' }, ticks: { color: '#94a3b8' } }
+            y: { grid: { color: '#281347' }, ticks: { color: '#a78bfa' } },
+            x: { grid: { color: '#281347' }, ticks: { color: '#a78bfa' } }
           },
           plugins: { legend: { labels: { color: '#f8fafc', font: { size: 10 } } } }
         }
@@ -1230,7 +1433,7 @@
       history.forEach(h => {
         const load = (h.weight * h.reps * (h.hrSpike / 100)) / 10;
         fit = fit * Math.exp(-1 / 42) + load * 0.15;
-        fat = fat * Math.exp(-1 / 7) + load * 0.35;
+        fat = fit * Math.exp(-1 / 7) + load * 0.35;
         fitness.push(fit.toFixed(1));
         fatigue.push(fat.toFixed(1));
       });
@@ -1240,16 +1443,16 @@
         data: {
           labels: labels,
           datasets: [
-            { label: 'Chronic Fitness Adaptation', data: fitness, borderColor: '#10b981', borderWidth: 2, tension: 0.3 },
-            { label: 'Acute Fatigue Accumulation', data: fatigue, borderColor: '#ef4444', borderWidth: 2, tension: 0.3 }
+            { label: 'Chronic Fitness Adaptation', data: fitness, borderColor: '#00f0ff', borderWidth: 2, tension: 0.3 },
+            { label: 'Acute Fatigue Accumulation', data: fatigue, borderColor: '#ff2a85', borderWidth: 2, tension: 0.3 }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           scales: {
-            y: { grid: { color: '#232f48' }, ticks: { color: '#94a3b8' } },
-            x: { grid: { color: '#232f48' }, ticks: { color: '#94a3b8' } }
+            y: { grid: { color: '#281347' }, ticks: { color: '#a78bfa' } },
+            x: { grid: { color: '#281347' }, ticks: { color: '#a78bfa' } }
           },
           plugins: { legend: { labels: { color: '#f8fafc', font: { size: 10 } } } }
         }
@@ -1273,7 +1476,7 @@
           localStorage.setItem(`workout_${getLocalISODate(d)}`, JSON.stringify(dayData));
         }
       }
-      alert("Loaded 60 days of training logs. Switching to ML tab...");
+      alert("Loaded 60 days of training logs. Switching to Stats tab...");
       switchMainTab('analytics');
     }
 
