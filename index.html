@@ -20,13 +20,10 @@
   <style>
     :root {
       --bg: #000000;
-      --card-bg: #070919;
       --cyan: #00f0ff;
       --purple: #bc6cff;
       --pink: #ff5ca8;
       --peach: #ffb86b;
-      --accent: #ff5ca8;
-      --danger: #ff3366;
       --text: #ffffff;
       --text-muted: #94a3b8;
     }
@@ -67,14 +64,13 @@
       background: linear-gradient(90deg, #ff5ca8, #bc6cff, #00f0ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: -0.02em;
     }
     .header-clock {
       font-size: 0.74rem;
       color: var(--cyan);
       font-weight: 700;
       font-variant-numeric: tabular-nums;
-      margin-top: 1px;
+      margin-top: 2px;
       text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
     }
     .header-actions {
@@ -90,11 +86,6 @@
       font-size: 0.72rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .btn-chip:hover {
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-      color: #fff;
     }
     .btn-chip.highlight {
       border-color: var(--pink);
@@ -105,7 +96,6 @@
       max-width: 680px;
       margin: 0 auto;
     }
-    /* VICE CITY CYAN TO NEON PURPLE BORDER TRANSITION WITH DEEP BLACK CARD */
     .bio-bar,
     .day-selector-card,
     .exercise-card,
@@ -118,7 +108,7 @@
       background-origin: border-box;
       background-clip: padding-box, border-box;
       border-radius: 14px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 240, 255, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 240, 255, 0.12);
       margin-bottom: 0.9rem;
     }
     .bio-bar {
@@ -137,14 +127,12 @@
       color: var(--peach);
       text-transform: uppercase;
       font-weight: 800;
-      letter-spacing: 0.05em;
     }
     .bio-stat .val {
       font-size: 1.1rem;
       font-weight: 800;
       color: #fff;
       margin-top: 0.1rem;
-      text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
     }
     .readiness-pill {
       font-size: 0.7rem;
@@ -155,13 +143,11 @@
       color: var(--cyan);
       border: 1px solid var(--cyan);
       display: inline-block;
-      box-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
     }
     .readiness-pill.fatigue {
       background: rgba(255, 92, 168, 0.18);
       color: var(--pink);
       border-color: var(--pink);
-      box-shadow: 0 0 8px rgba(255, 92, 168, 0.35);
     }
     .day-selector-card {
       padding: 0.9rem;
@@ -183,24 +169,21 @@
       color: var(--peach);
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
       margin-bottom: 0.35rem;
     }
     select {
       width: 100%;
       background: #090e24;
-      border: 1px solid #3b1866;
+      border: 1.5px solid #3b1866;
       color: #ffffff;
       padding: 0.65rem;
       border-radius: 8px;
       font-size: 0.88rem;
       font-weight: 600;
       outline: none;
-      transition: all 0.2s ease;
     }
     select:focus {
       border-color: var(--cyan);
-      box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
     }
     input[type="date"] {
       width: 100%;
@@ -213,19 +196,10 @@
       font-weight: 800;
       outline: none;
       color-scheme: dark;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
-      transition: all 0.2s ease;
-    }
-    input[type="date"]:focus {
-      border-color: var(--pink) !important;
-      box-shadow: 0 0 10px rgba(255, 92, 168, 0.4);
-      color: var(--pink) !important;
     }
     input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(65%) sepia(90%) saturate(1500%) hue-rotate(145deg) brightness(130%) drop-shadow(0 0 5px #00f0ff);
       cursor: pointer;
-      opacity: 1;
-      padding: 4px;
     }
     .prompt-banner {
       padding: 0.85rem;
@@ -251,13 +225,11 @@
       padding: 0.45rem 0.8rem;
       border-radius: 7px;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
     }
     .btn-action.empty {
       background: transparent;
       color: var(--text-muted);
       border: 1px solid #3b1866;
-      box-shadow: none;
     }
     .exercise-card {
       padding: 0.9rem;
@@ -308,11 +280,9 @@
       padding: 0.45rem 0.5rem;
       display: flex;
       align-items: center;
-      transition: border-color 0.2s ease;
     }
     .input-pill:focus-within {
       border-color: var(--cyan);
-      box-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
     }
     .input-pill input {
       width: 100%;
@@ -365,7 +335,6 @@
       cursor: pointer;
       margin-top: 0.5rem;
       box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
-      letter-spacing: 0.02em;
     }
     .ml-info-card {
       padding: 0.9rem;
@@ -378,7 +347,6 @@
       font-weight: 800;
       color: var(--cyan);
       text-transform: uppercase;
-      letter-spacing: 0.04em;
     }
     .ml-info-card .desc {
       font-size: 0.8rem;
@@ -413,7 +381,6 @@
       font-weight: 900;
       color: var(--cyan);
       margin-top: 0.2rem;
-      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
     }
     .chart-container-box {
       padding: 0.9rem;
@@ -456,7 +423,6 @@
       justify-content: center;
       cursor: pointer;
       gap: 0.25rem;
-      transition: color 0.2s ease;
     }
     .nav-tab-btn.active {
       color: var(--cyan);
@@ -611,12 +577,44 @@
   <div class="toast" id="toast-banner">Session Saved & Model Calibrated!</div>
 
   <script>
-    // 1. REGISTER PWA SERVICE WORKER
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(() => {});
       });
     }
 
-    // 2. TIMEZONE-SAFE LOCAL DATE & CLOCK HELPERS
-    function getLocalIS
+    function getLocalISODate(d = new Date()) {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function getLocalDayOfWeek(dateString) {
+      const parts = dateString.split('-').map(Number);
+      if (parts.length < 3) return new Date().getDay();
+      return new Date(parts[0], parts[1] - 1, parts[2]).getDay();
+    }
+
+    function initLiveClock() {
+      const clockEl = document.getElementById("live-clock");
+      if (!clockEl) return;
+      const update = () => {
+        const now = new Date();
+        clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      };
+      update();
+      setInterval(update, 1000);
+    }
+
+    const FITBIT_CONFIG = {
+      clientId: "YOUR_FITBIT_CLIENT_ID",
+      redirectUri: window.location.origin + window.location.pathname,
+      scope: "heartrate sleep activity"
+    };
+
+    const PRESCRIBED_SPLITS = {
+      "Push A": [
+        { name: "Barbell bench press", sets: "4 × 6–8", minR: 6, maxR: 8, baseKg: 75, defHR: 156 },
+        { name: "Incline dumbbell press", sets: "3 × 8–12", minR: 8, maxR: 12, baseKg: 28, defHR: 150 },
+        { name: "Seated shoulder press", sets: "3 ×
