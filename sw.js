@@ -1,4 +1,4 @@
-const CACHE_NAME = 'workout-ml-v8-vicecity-palette';
+const CACHE_NAME = 'workout-ml-v9-vicecity-fix';
 const STATIC_ASSETS = [
   './index.html',
   './manifest.json',
