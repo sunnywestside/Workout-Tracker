@@ -1,4 +1,4 @@
-const CACHE_NAME = 'workout-ml-v4-secure';
+const CACHE_NAME = 'workout-ml-v6-vice-city';
 const STATIC_ASSETS = [
   './index.html',
   './manifest.json',
@@ -22,7 +22,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Enforce origin restrictions: only intercept same-origin assets or pinned CDN
+  // Only intercept same-origin requests or explicitly approved CDNs
   const url = new URL(event.request.url);
   const isApproved = url.origin === self.location.origin || url.origin === 'https://cdn.jsdelivr.net';
 
