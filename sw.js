@@ -1,4 +1,4 @@
-const CACHE_NAME = 'workout-ml-v9-vicecity-fix';
+const CACHE_NAME = 'workout-ml-v10-live-fix';
 const STATIC_ASSETS = [
   './index.html',
   './manifest.json',
@@ -22,12 +22,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Only intercept same-origin requests or explicitly approved CDNs
   const url = new URL(event.request.url);
   const isApproved = url.origin === self.location.origin || url.origin === 'https://cdn.jsdelivr.net';
 
   if (!isApproved) {
-    return; // Pass through to network directly without cache interference
+    return;
   }
 
   event.respondWith(
