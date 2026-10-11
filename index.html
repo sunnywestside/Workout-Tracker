@@ -20,22 +20,15 @@
   <style>
     :root {
       --bg: #000000;
-      --ocean: #0b0f2b;
-      --card-bg: #050714;
-      --card-gradient: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(188, 108, 255, 0.12) 100%);
+      --card-bg: #070919;
       --cyan: #00f0ff;
       --purple: #bc6cff;
       --pink: #ff5ca8;
       --peach: #ffb86b;
       --accent: #ff5ca8;
-      --success: #00f0ff;
-      --warning: #ffb86b;
       --danger: #ff3366;
       --text: #ffffff;
       --text-muted: #94a3b8;
-      --glow-cyan: 0 0 12px rgba(0, 240, 255, 0.45);
-      --glow-purple: 0 0 12px rgba(188, 108, 255, 0.45);
-      --glow-pink: 0 0 12px rgba(255, 92, 168, 0.5);
     }
     * {
       box-sizing: border-box;
@@ -45,7 +38,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      background-color: var(--bg);
+      background-color: #000000;
       color: var(--text);
       padding-bottom: 95px;
       min-height: 100vh;
@@ -57,7 +50,7 @@
       background: rgba(0, 0, 0, 0.95);
       backdrop-filter: blur(12px);
       padding: 0.85rem 1rem;
-      border-bottom: 1.5px solid transparent;
+      border-bottom: 2px solid transparent;
       border-image: linear-gradient(90deg, #00f0ff, #bc6cff, #ff5ca8) 1;
       display: flex;
       justify-content: space-between;
@@ -77,23 +70,20 @@
       letter-spacing: -0.02em;
     }
     .header-clock {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       color: var(--cyan);
-      font-weight: 600;
+      font-weight: 700;
       font-variant-numeric: tabular-nums;
       margin-top: 1px;
-      text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
     }
     .header-actions {
       display: flex;
       gap: 0.45rem;
     }
     .btn-chip {
-      background: #080b1e;
-      border: 1px solid transparent;
-      background-image: linear-gradient(#080b1e, #080b1e), linear-gradient(135deg, #00f0ff, #bc6cff);
-      background-origin: border-box;
-      background-clip: padding-box, border-box;
+      background: #080c20;
+      border: 1px solid var(--cyan);
       color: var(--cyan);
       padding: 0.4rem 0.65rem;
       border-radius: 7px;
@@ -103,11 +93,11 @@
       transition: all 0.2s ease;
     }
     .btn-chip:hover {
-      box-shadow: var(--glow-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
       color: #fff;
     }
     .btn-chip.highlight {
-      background-image: linear-gradient(#080b1e, #080b1e), linear-gradient(135deg, #ff5ca8, #bc6cff);
+      border-color: var(--pink);
       color: var(--pink);
     }
     .content {
@@ -115,25 +105,24 @@
       max-width: 680px;
       margin: 0 auto;
     }
-    /* TRANSITIONING CYAN TO NEON PURPLE BLOCK STYLE */
+    /* VICE CITY CYAN TO NEON PURPLE BORDER TRANSITION WITH DEEP BLACK CARD */
     .bio-bar,
     .day-selector-card,
     .exercise-card,
     .prompt-banner,
     .ml-info-card,
     .chart-container-box {
-      position: relative;
-      background: linear-gradient(135deg, rgba(0, 240, 255, 0.06) 0%, rgba(188, 108, 255, 0.12) 100%), #060814;
+      background: #060814;
       border: 1.5px solid transparent;
-      background-image: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, rgba(188, 108, 255, 0.1) 100%), linear-gradient(135deg, #00f0ff 0%, #bc6cff 100%);
+      background-image: linear-gradient(#060814, #060814), linear-gradient(135deg, #00f0ff 0%, #bc6cff 100%);
       background-origin: border-box;
       background-clip: padding-box, border-box;
       border-radius: 14px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 240, 255, 0.08);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 240, 255, 0.15);
+      margin-bottom: 0.9rem;
     }
     .bio-bar {
       padding: 0.8rem 0.9rem;
-      margin-bottom: 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -151,32 +140,31 @@
       letter-spacing: 0.05em;
     }
     .bio-stat .val {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: #fff;
       margin-top: 0.1rem;
-      text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
     }
     .readiness-pill {
       font-size: 0.7rem;
       font-weight: 800;
-      padding: 3px 9px;
+      padding: 4px 9px;
       border-radius: 12px;
-      background: rgba(0, 240, 255, 0.18);
+      background: rgba(0, 240, 255, 0.15);
       color: var(--cyan);
       border: 1px solid var(--cyan);
       display: inline-block;
-      box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
     }
     .readiness-pill.fatigue {
       background: rgba(255, 92, 168, 0.18);
       color: var(--pink);
       border-color: var(--pink);
-      box-shadow: 0 0 8px rgba(255, 92, 168, 0.3);
+      box-shadow: 0 0 8px rgba(255, 92, 168, 0.35);
     }
     .day-selector-card {
       padding: 0.9rem;
-      margin-bottom: 0.9rem;
     }
     .row {
       display: flex;
@@ -193,29 +181,30 @@
       display: block;
       font-size: 0.68rem;
       color: var(--peach);
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.03em;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.35rem;
     }
     select {
       width: 100%;
-      background: #080c20;
+      background: #090e24;
       border: 1px solid #3b1866;
       color: #ffffff;
       padding: 0.65rem;
       border-radius: 8px;
       font-size: 0.88rem;
+      font-weight: 600;
       outline: none;
       transition: all 0.2s ease;
     }
     select:focus {
       border-color: var(--cyan);
-      box-shadow: var(--glow-cyan);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
     }
     input[type="date"] {
       width: 100%;
-      background: #080c20 !important;
+      background: #090e24 !important;
       border: 1.5px solid var(--cyan) !important;
       color: #00f0ff !important;
       padding: 0.65rem;
@@ -224,12 +213,12 @@
       font-weight: 800;
       outline: none;
       color-scheme: dark;
-      box-shadow: var(--glow-cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
       transition: all 0.2s ease;
     }
     input[type="date"]:focus {
       border-color: var(--pink) !important;
-      box-shadow: var(--glow-pink);
+      box-shadow: 0 0 10px rgba(255, 92, 168, 0.4);
       color: var(--pink) !important;
     }
     input[type="date"]::-webkit-calendar-picker-indicator {
@@ -239,8 +228,7 @@
       padding: 4px;
     }
     .prompt-banner {
-      padding: 0.8rem;
-      margin-bottom: 0.9rem;
+      padding: 0.85rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -285,13 +273,12 @@
       font-size: 0.98rem;
       font-weight: 700;
       color: #fff;
-      text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
     }
     .ex-bracket {
       font-size: 0.72rem;
       color: var(--cyan);
       background: rgba(0, 240, 255, 0.12);
-      border: 1px solid rgba(0, 240, 255, 0.3);
+      border: 1px solid rgba(0, 240, 255, 0.35);
       padding: 2px 8px;
       border-radius: 10px;
       font-weight: 700;
@@ -307,7 +294,7 @@
     .ex-ml-target {
       color: var(--purple);
       font-weight: 700;
-      text-shadow: 0 0 8px rgba(188, 108, 255, 0.4);
+      text-shadow: 0 0 6px rgba(188, 108, 255, 0.4);
     }
     .inputs-grid {
       display: grid;
@@ -315,8 +302,8 @@
       gap: 0.5rem;
     }
     .input-pill {
-      background: #080c20;
-      border: 1px solid #23164a;
+      background: #090e24;
+      border: 1px solid #281a4d;
       border-radius: 8px;
       padding: 0.45rem 0.5rem;
       display: flex;
@@ -325,7 +312,7 @@
     }
     .input-pill:focus-within {
       border-color: var(--cyan);
-      box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.35);
     }
     .input-pill input {
       width: 100%;
@@ -382,7 +369,6 @@
     }
     .ml-info-card {
       padding: 0.9rem;
-      margin-bottom: 0.9rem;
     }
     .ml-info-card .top {
       display: flex;
@@ -407,12 +393,12 @@
       margin-bottom: 0.9rem;
     }
     .kpi-card {
-      background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, rgba(188, 108, 255, 0.1) 100%), #060814;
-      border: 1px solid transparent;
+      background: #060814;
+      border: 1.5px solid transparent;
       background-image: linear-gradient(#060814, #060814), linear-gradient(135deg, #00f0ff, #bc6cff);
       background-origin: border-box;
       background-clip: padding-box, border-box;
-      border-radius: 11px;
+      border-radius: 12px;
       padding: 0.75rem;
       text-align: center;
     }
@@ -431,7 +417,6 @@
     }
     .chart-container-box {
       padding: 0.9rem;
-      margin-bottom: 0.9rem;
     }
     .chart-header {
       font-size: 0.78rem;
@@ -451,8 +436,8 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(0, 0, 0, 0.96);
-      border-top: 1.5px solid transparent;
+      background: rgba(0, 0, 0, 0.97);
+      border-top: 2px solid transparent;
       border-image: linear-gradient(90deg, #00f0ff, #bc6cff, #ff5ca8) 1;
       display: flex;
       height: 64px;
@@ -547,6 +532,25 @@
     <button class="save-btn" onclick="saveActiveSession()">Save Session & Calibrate Model</button>
   </main>
 
+  <main class="content" id="history-view" style="display: none;">
+    <div class="day-selector-card">
+      <div class="row">
+        <div class="col">
+          <label>Filter by Exercise</label>
+          <select id="hist-filter-ex" onchange="renderHistoryTimeline()">
+            <option value="ALL">Show All Exercises</option>
+          </select>
+        </div>
+        <div class="col" style="flex: 0 0 100px;">
+          <label>Total Logs</label>
+          <div id="hist-total-count" style="font-size: 1.1rem; font-weight: 800; color: var(--cyan); padding-top: 0.35rem;">0 Days</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="history-timeline-container"></div>
+  </main>
+
   <main class="content" id="analytics-view" style="display: none;">
     <div class="ml-info-card">
       <div class="top"><span>🌴 Autonomous Performance Stats</span><span id="lambda-indicator">λ = Auto (GCV)</span></div>
@@ -568,21 +572,21 @@
     <div class="day-selector-card" style="margin-bottom: 0.9rem;">
       <label style="margin-bottom: 0.5rem;">4-Week Block Averages (Excel Formula Mirror)</label>
       <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; text-align: center;">
-        <div style="background:#090d16; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border);">
-          <div style="font-size: 0.6rem; color: var(--text-muted);">W1 (d1-7)</div>
-          <div style="font-weight: 700; font-size: 0.95rem; color: var(--accent);" id="block-w1">-</div>
+        <div style="background:#090e24; padding: 0.5rem; border-radius: 6px; border: 1px solid #3b1866;">
+          <div style="font-size: 0.6rem; color: var(--peach);">W1 (d1-7)</div>
+          <div style="font-weight: 700; font-size: 0.95rem; color: var(--cyan);" id="block-w1">-</div>
         </div>
-        <div style="background:#090d16; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border);">
-          <div style="font-size: 0.6rem; color: var(--text-muted);">W2 (d8-14)</div>
-          <div style="font-weight: 700; font-size: 0.95rem; color: var(--accent);" id="block-w2">-</div>
+        <div style="background:#090e24; padding: 0.5rem; border-radius: 6px; border: 1px solid #3b1866;">
+          <div style="font-size: 0.6rem; color: var(--peach);">W2 (d8-14)</div>
+          <div style="font-weight: 700; font-size: 0.95rem; color: var(--cyan);" id="block-w2">-</div>
         </div>
-        <div style="background:#090d16; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border);">
-          <div style="font-size: 0.6rem; color: var(--text-muted);">W3 (d15-21)</div>
-          <div style="font-weight: 700; font-size: 0.95rem; color: var(--accent);" id="block-w3">-</div>
+        <div style="background:#090e24; padding: 0.5rem; border-radius: 6px; border: 1px solid #3b1866;">
+          <div style="font-size: 0.6rem; color: var(--peach);">W3 (d15-21)</div>
+          <div style="font-weight: 700; font-size: 0.95rem; color: var(--cyan);" id="block-w3">-</div>
         </div>
-        <div style="background:#090d16; padding: 0.5rem; border-radius: 6px; border: 1px solid var(--border);">
-          <div style="font-size: 0.6rem; color: var(--text-muted);">W4 (d22-28)</div>
-          <div style="font-weight: 700; font-size: 0.95rem; color: var(--accent);" id="block-w4">-</div>
+        <div style="background:#090e24; padding: 0.5rem; border-radius: 6px; border: 1px solid #3b1866;">
+          <div style="font-size: 0.6rem; color: var(--peach);">W4 (d22-28)</div>
+          <div style="font-weight: 700; font-size: 0.95rem; color: var(--cyan);" id="block-w4">-</div>
         </div>
       </div>
     </div>
@@ -598,15 +602,21 @@
     </div>
   </main>
 
-  <main class="content" id="history-view" style="display: none;">
-    <div class="day-selector-card">
-      <div class="row">
-        <div class="col">
-          <label>Filter by Exercise</label>
-          <select id="hist-filter-ex" onchange="renderHistoryTimeline()">
-            <option value="ALL">Show All Exercises</option>
-          </select>
-        </div>
-        <div class="col" style="flex: 0 0 100px;">
-          <label>Total Logs</label>
-          <div id="hist-total-count" style="font-size: 1.1rem; font-weight: 800; color: var(--accent); padding-top: 0.35r
+  <nav class="bottom-nav">
+    <button class="nav-tab-btn active" id="tab-log" onclick="switchMainTab('log')"><span class="icon">🏋️</span><span>Daily Log</span></button>
+    <button class="nav-tab-btn" id="tab-history" onclick="switchMainTab('history')"><span class="icon">📜</span><span>Past Logs</span></button>
+    <button class="nav-tab-btn" id="tab-analytics" onclick="switchMainTab('analytics')"><span class="icon">🧠</span><span>Stats</span></button>
+  </nav>
+
+  <div class="toast" id="toast-banner">Session Saved & Model Calibrated!</div>
+
+  <script>
+    // 1. REGISTER PWA SERVICE WORKER
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+
+    // 2. TIMEZONE-SAFE LOCAL DATE & CLOCK HELPERS
+    function getLocalIS
